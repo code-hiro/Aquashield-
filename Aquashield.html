@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AquaShield - Transformando Inundaciones en Oportunidades Sostenibles</title>
+    <style>
+        /* Reset simple */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html,body { height:100%; }
+        body{
+            font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+            color:#0f172a;
+            background:#fff;
+            line-height:1.5;
+            -webkit-font-smoothing:antialiased;
+            display:flex;
+            flex-direction:column;
+            min-height:100vh;
+            margin:0;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 2px 14px rgba(2,6,23,0.06);
+            z-index: 1200;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.9rem 1.25rem;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap: 1rem;
+        }
+        .logo { color:#0ea5e9; font-weight:800; font-size:1.15rem; text-decoration:none; display:flex; align-items:center; gap:0.5rem; }
+        .tabs { display:flex; align-items:center; gap:0.6rem; }
+        .tab-btn {
+            background: transparent; border: none; cursor: pointer; padding:0.45rem 0.7rem;
+            color:#475569; font-weight:700; border-radius:8px; transition: all 0.14s ease;
+        }
+        .tab-btn:hover { color:#0ea5e9; background: rgba(14,165,233,0.06); }
+        .tab-btn.active { background: rgba(14,165,233,0.12); color:#023844; }
+
+        /* Dropdown */
+        .dropdown { position:relative; }
+        .dropdown-toggle { display:flex; align-items:center; gap:0.4rem; }
+        .dropdown-menu {
+            position:absolute; left:0; top:calc(100% + 8px);
+            background:white; border-radius:10px; box-shadow: 0 10px 30px rgba(2,6,23,0.08);
+            overflow:hidden; min-width:200px; display:none;
+        }
+        .dropdown.open .dropdown-menu { display:block; }
+        .dropdown-menu a { display:block; padding:0.7rem 0.95rem; text-decoration:none; color:#164e63; font-weight:700; }
+        .dropdown-menu a:hover { background:#f1fbff; color:#0ea5e9; }
+
+        /* Floating cart + mini-cart */
+        .cart-float {
+            position: fixed; right: 18px; bottom: 18px; z-index:1400;
+            background: linear-gradient(135deg,#0ea5e9,#06b6d4);
+            color:white; padding:0.55rem 0.8rem; border-radius:999px; display:flex; gap:0.6rem; align-items:center;
+            box-shadow: 0 12px 36px rgba(14,165,233,0.24); cursor:pointer;
+        }
+        .cart-count { background: rgba(255,255,255,0.18); padding:0.12rem 0.46rem; border-radius:999px; font-weight:800; }
+        .mini-cart {
+            position: fixed; right: 18px; bottom: 70px; width:340px; max-width:92vw;
+            background:white; border-radius:12px; box-shadow: 0 12px 40px rgba(2,6,23,0.12); overflow:hidden; z-index:1400;
+            display:none;
+        }
+        .mini-cart.visible { display:block; }
+        .mini-cart .header { padding:0.8rem 1rem; font-weight:800; border-bottom:1px solid #eef2f7; color:#0f172a; }
+        .mini-cart .body { padding:0.8rem 1rem; max-height:210px; overflow:auto; color:#64748b; }
+        .mini-cart .item { display:flex; gap:0.6rem; align-items:center; margin-bottom:0.8rem; }
+        .mini-cart img { width:56px; height:56px; object-fit:cover; border-radius:8px; }
+        .mini-cart .meta .name { font-weight:800; color:#0f172a; font-size:0.95rem; }
+        .mini-cart .footer { padding:0.7rem 1rem; border-top:1px solid #eef2f7; display:flex; justify-content:space-between; align-items:center; }
+
+        /* HERO */
+        .hero { padding:6.2rem 1.25rem 2rem; background: linear-gradient(135deg,#e0f2fe,#cffafe); text-align:center; }
+        .hero h1 { font-size:2.4rem; color:#0f172a; line-height:1.05; margin-bottom:0.6rem; }
+        .hero .highlight { background: linear-gradient(135deg,#0ea5e9,#06b6d4); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .hero p { color:#475569; max-width:840px; margin:0.6rem auto 1rem; }
+        .btn { padding:0.6rem 0.9rem; border-radius:10px; border:none; cursor:pointer; font-weight:800; }
+        .btn-primary { background: linear-gradient(135deg,#0ea5e9,#06b6d4); color:white; box-shadow: 0 10px 30px rgba(14,165,233,0.18); }
+        .btn-outline { background:transparent; border:1px solid #e6eef6; color:#0f172a; }
+
+        main { max-width:1200px; margin:1.5rem auto 4rem; padding:0 1.25rem;  flex:1;}
+        section { padding:2.2rem 0; }
+
+        h2 { font-size:1.8rem; color:#0ea5e9; margin-bottom:0.6rem; text-align:center; }
+        .section-subtitle { color:#64748b; text-align:center; margin-bottom:1rem; }
+
+        /* GRIDS & CARDS */
+        .services-grid, .products-grid, .team-grid, .clientes-grid { display:grid; gap:1.1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+        .service-card, .product-card, .team-card, .cliente-card { background:white; border-radius:12px; overflow:hidden; box-shadow:0 8px 28px rgba(2,6,23,0.04); }
+        .service-card img, .product-card img { width:100%; height:180px; object-fit:cover; display:block; }
+        .service-card-content, .product-card-content { padding:1rem; }
+        .product-card h3 { color:#0ea5e9; margin-bottom:0.45rem; font-size:1.05rem; }
+        .product-meta { display:flex; justify-content:space-between; align-items:center; gap:0.6rem; margin-top:0.6rem; }
+        .price { font-weight:900; color:#0f172a; }
+
+        /* PRODUCT DETAIL PANEL (pestaña completa) */
+        .product-detail {
+            display:grid;
+            grid-template-columns: 1fr 1fr;
+            gap:1rem;
+            align-items:start;
+        }
+        .product-detail img { width:100%; border-radius:12px; box-shadow: 0 10px 30px rgba(2,6,23,0.06); }
+        .product-detail .info { padding:0.25rem 0; }
+        .product-detail .info h3 { font-size:1.4rem; margin-bottom:0.6rem; color:#0ea5e9; }
+        .product-detail .info p { color:#475569; margin-bottom:1rem; }
+        .product-actions { display:flex; gap:0.6rem; align-items:center; margin-top:0.6rem; }
+
+        /* CART PAGE */
+        .cart-page { background:#f8fafc; padding:1rem; border-radius:12px; }
+        .cart-row { display:flex; gap:1rem; align-items:center; padding:0.8rem; background:white; border-radius:10px; box-shadow:0 6px 24px rgba(2,6,23,0.04); }
+        .cart-row img { width:84px; height:84px; object-fit:cover; border-radius:8px; }
+        .cart-details { flex:1; }
+        .cart-summary { padding:1rem; background:white; border-radius:12px; box-shadow:0 6px 24px rgba(2,6,23,0.04); }
+
+        /* PROCESO (Cómo trabajamos) */
+        .proceso-step { display:flex; gap:1rem; align-items:flex-start; background:white; padding:1rem; border-radius:12px; box-shadow:0 8px 28px rgba(2,6,23,0.04); }
+        .step-number { width:48px; height:48px; border-radius:999px; background: linear-gradient(135deg,#0ea5e9,#06b6d4); color:white; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:1.05rem; flex-shrink:0; }
+        .step-content p { color:#64748b; margin-top:0.2rem; }
+
+        /* CONTACT CARD */
+        .contact-box { background: linear-gradient(135deg,#0ea5e9,#06b6d4); color:white; padding:1.05rem; border-radius:12px; text-align:center; }
+
+        /* Responsive */
+        @media (max-width:900px) {
+            .product-detail { grid-template-columns: 1fr; }
+            .hero h1 { font-size:1.6rem; }
+            .tabs { display:none; } /* keep nav simpler on mobile */
+            .dropdown-menu { min-width:150px; }
+            .mini-cart { right: 14px; }
+            .product-card img, .service-card img { height:160px; }
+        }
+
+        /* Minor utilities */
+        .muted { color:#64748b; font-size:0.96rem; }
+        .small { font-size:0.9rem; color:#64748b; }
+        .center { text-align:center; }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        main {
+            flex: 1;
+        }
+        footer {
+            padding: 2rem 1rem;
+            text-align: center;
+            color: #94a3b8;
+            margin-top: auto;
+            position: relative;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAV -->
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="#inicio" data-link="inicio">💧 AquaShield</a>
+
+            <!-- Tabs / Menu -->
+            <div class="tabs" role="tablist" aria-label="Navegación principal">
+                <button class="tab-btn active" data-tab="inicio">Inicio</button>
+                <button class="tab-btn" data-tab="historia">Historia</button>
+
+                <div class="dropdown" id="ventasDropdown" aria-haspopup="true">
+                    <button class="tab-btn dropdown-toggle" type="button">Ventas ▾</button>
+                    <div class="dropdown-menu" role="menu">
+                        <a href="#" data-tab="productos" class="menu-link">Productos</a>
+                        <a href="#" data-tab="servicios" class="menu-link">Servicios</a>
+                    </div>
+                </div>
+
+                <button class="tab-btn" data-tab="propuesta">Propuesta</button>
+                <button class="tab-btn" data-tab="clientes">Clientes</button>
+                <button class="tab-btn" data-tab="equipo">Equipo</button>
+                <button class="tab-btn" data-tab="contacto">Contacto</button>
+                <button class="tab-btn" data-tab="carrito" title="Ver carrito">Carrito</button>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- FLOATING CART + MINI PREVIEW -->
+    <div class="cart-float" id="cartFloat" title="Ver carrito">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M3 3h2l.4 2M7 13h10l4-8H5.4" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="10" cy="20" r="1" fill="white"></circle><circle cx="18" cy="20" r="1" fill="white"></circle></svg>
+        <div class="cart-count" id="cartCount">0</div>
+    </div>
+
+    <div class="mini-cart" id="miniCart" aria-hidden="true">
+        <div class="header">Carrito</div>
+        <div class="body" id="miniCartBody">
+            <div style="color:#64748b;">No hay productos agregados</div>
+        </div>
+        <div class="footer">
+            <div style="font-weight:800;">Total: <span id="miniTotal">0 COP</span></div>
+            <div style="display:flex;gap:0.45rem;">
+                <button class="btn btn-outline" id="miniVer">Ver</button>
+                <button class="btn btn-primary" id="miniPagar">Pagar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN (pestañas) -->
+    <main id="main" style="max-width:1200px;margin:1.2rem auto 4rem;padding:0 1.25rem;">
+        <!-- PANEL: INICIO (se muestra por defecto) -->
+        <section class="tab-panel" id="panel-inicio" data-panel>
+            <h2>Bienvenido a AquaShield</h2>
+            <p class="section-subtitle">Soluciones y productos diseñados para prevenir inundaciones y fomentar la reutilización responsable del agua.</p>
+<!-- HERO (Inicio) -->
+    <div class="hero" id="inicio-anchor" style="padding-top:78px;">
+        <h1 id="heroTitle">
+            Transformando Inundaciones en<br>
+            <span class="highlight">Oportunidades Sostenibles</span>
+        </h1>
+        <p id="heroSubtitle">Protegemos tu hogar, institución o empresa mientras convertimos el agua estancada en un recurso útil y económico para toda la comunidad.</p>
+        <div style="margin-top:0.9rem;">
+        </div>
+
+        <!-- Imagen (debajo del texto, solo en Inicio) -->
+        <div style="max-width:900px;margin:1.4rem auto;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.12);">
+            <!-- Usamos un recurso remoto como el resto de imágenes -->
+            <img src="https://i.imgur.com/YELay3S.jpeg" alt="Camión de recolección de agua AquaShield en operación" style="width:100%;height:auto;display:block;">
+            <div style="background:white;padding:1rem;text-align:center;">
+                <h3 style="color:#0ea5e9;font-size:1.05rem;margin-bottom:0.25rem;">Nuestro Sistema en Acción</h3>
+                <p style="color:#64748b;margin:0;font-size:0.95rem;">Camiones especializados para la recolección y transporte de aguas estancadas</p>
+            </div>
+        </div>
+    </div>
+
+    
+
+
+            <div style="display:flex;gap:1.1rem;flex-wrap:wrap;justify-content:center;margin-top:1rem;">
+                <button class="btn btn-primary" id="inicioSolicitar">Solicita una Evaluación Gratuita</button>
+            </div>
+
+            <div style="margin-top:1.5rem;">
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;">
+                    <div class="stat-card" style="background:white;padding:1rem;border-radius:12px;box-shadow:0 8px 28px rgba(2,6,23,0.04);text-align:center;">
+                        <div style="font-size:1.6rem;font-weight:900;color:#0ea5e9;">100%</div>
+                        <div class="small muted">Prevención de Inundaciones</div>
+                    </div>
+                    <div class="stat-card" style="background:white;padding:1rem;border-radius:12px;box-shadow:0 8px 28px rgba(2,6,23,0.04);text-align:center;">
+                        <div style="font-size:1.6rem;font-weight:900;color:#0ea5e9;">Miles de Litros</div>
+                        <div class="small muted">Agua Reutilizada</div>
+                    </div>
+                    <div class="stat-card" style="background:white;padding:1rem;border-radius:12px;box-shadow:0 8px 28px rgba(2,6,23,0.04);text-align:center;">
+                        <div style="font-size:1.6rem;font-weight:900;color:#0ea5e9;">Múltiples</div>
+                        <div class="small muted">Comunidades Impactadas</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL: HISTORIA -->
+        <section class="tab-panel" id="panel-historia" data-panel style="display:none;">
+            <h2>Nuestra Historia</h2>
+            <p class="section-subtitle">AquaShield surge para transformar un problema recurrente en una oportunidad de salud pública y sostenibilidad.</p>
+            <div style="background: linear-gradient(135deg,#dbeafe,#bfdbfe); padding:1rem; border-radius:12px;">
+                <p style="margin-bottom:0.6rem; color:#0f172a;">
+                    AquaShield surge para transformar un problema recurrente (las lluvias intensas, las aguas estancadas y la afectación a hogares e instituciones) en una oportunidad de salud pública y sostenibilidad.
+                </p>
+                <p style="color:#0f172a;">
+                    Desde el inicio integramos prevención de inundaciones, recolección y tratamiento de agua, y educación comunitaria para fortalecer capacidades locales y reducir riesgos sanitarios y ambientales. Hemos participado en iniciativas como Cartagena Ciudad Sostenible 2.0 y el Reto Incuba CUEE, demostrando ser una empresa con una gran idea de transformación social.
+                </p>
+            </div>
+        </section>
+
+        <!-- PANEL: PRODUCTOS (lista) -->
+        <section class="tab-panel" id="panel-productos" data-panel style="display:none;">
+            <h2>Nuestros Productos</h2>
+            <p class="section-subtitle">Protección de venta directa para tu hogar o institución</p>
+
+            <div class="products-grid" id="productsGrid" style="margin-top:0.8rem;">
+                <!-- Producto: Barreras (85,000 COP) -->
+                <article class="product-card" data-id="barrera" data-price="85000" style="cursor:pointer;">
+                    <img src="https://i.imgur.com/eGsM4mI.jpeg" alt="Barreras Portátiles">
+                    <div class="product-card-content">
+                        <h3>Barreras Portátiles</h3>
+                        <p class="small muted">Comercializamos barreras contra inundaciones para proteger viviendas e instituciones.</p>
+                        <div class="product-meta">
+                            <div class="price">85.000 COP</div>
+                            <div style="display:flex;gap:0.4rem;align-items:center;">
+
+                                <button class="btn btn-primary view-product" data-product="barrera">Ver</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Producto: Filtros (110,000 COP) -->
+                <article class="product-card" data-id="filtro" data-price="110000" style="cursor:pointer;">
+                    <img src="https://i.imgur.com/4G2vDXd.jpeg" alt="Filtros Portátiles">
+                    <div class="product-card-content">
+                        <h3>Filtros Portátiles</h3>
+                        <p class="small muted">Ofrecemos filtros con carbón activado y membranas para emergencias o consumo seguro.</p>
+                        <div class="product-meta">
+                            <div class="price">110.000 COP</div>
+                            <div style="display:flex;gap:0.4rem;align-items:center;">
+
+                                <button class="btn btn-primary view-product" data-product="filtro">Ver</button>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- PANEL: PRODUCT DETAIL - Barrera -->
+        <section class="tab-panel" id="panel-product-barrera" data-panel style="display:none;">
+            <h2>Detalle del Producto</h2>
+            <div class="product-detail" style="margin-top:0.8rem;">
+                <div>
+                    <img src="https://i.imgur.com/eGsM4mI.jpeg" alt="Barreras Portátiles">
+                </div>
+                <div class="info">
+                    <h3>Barreras Portátiles</h3>
+                    <p class="muted">
+                        Protege tu hogar o institución con barreras portátiles fáciles de instalar. Diseñadas para situaciones de emergencia, son ligeras, duraderas y rápidas de desplegar.
+                    </p>
+                    <p><strong>Características:</strong></p>
+                    <ul class="small muted">
+                        <li>Material resistente y reutilizable.</li>
+                        <li>Fácil transporte y montaje.</li>
+                        <li>Apropiada para viviendas, comercios e instituciones.</li>
+                    </ul>
+
+                    <div style="margin-top:0.8rem;">
+                        <div style="font-weight:900;font-size:1.1rem;margin-bottom:0.6rem;">85.000 COP</div>
+                        <div class="product-actions">
+                            <input id="qty-barrera" type="number" min="1" value="1" style="width:84px;padding:0.5rem;border-radius:8px;border:1px solid #e6eef6;">
+                            <button class="btn btn-primary" id="add-barrera">Agregar al carrito</button>
+                            <button class="btn btn-outline" id="back-products-barrera">Volver a productos</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL: PRODUCT DETAIL - Filtro -->
+        <section class="tab-panel" id="panel-product-filtro" data-panel style="display:none;">
+            <h2>Detalle del Producto</h2>
+            <div class="product-detail" style="margin-top:0.8rem;">
+                <div>
+                    <img src="https://i.imgur.com/4G2vDXd.jpeg" alt="Filtros Portátiles">
+                </div>
+                <div class="info">
+                    <h3>Filtros Portátiles</h3>
+                    <p class="muted">
+                        Filtros con carbón activado y membranas - ideales para emergencias y consumo seguro. Diseñados para mejorar la calidad del agua en situaciones críticas.
+                    </p>
+                    <p><strong>Características:</strong></p>
+                    <ul class="small muted">
+                        <li>Carbón activado para reducción de olores y compuestos orgánicos.</li>
+                        <li>Membranas para retención de partículas y patógenos.</li>
+                        <li>Fácil mantenimiento y cambio de cartuchos.</li>
+                    </ul>
+
+                    <div style="margin-top:0.8rem;">
+                        <div style="font-weight:900;font-size:1.1rem;margin-bottom:0.6rem;">110.000 COP</div>
+                        <div class="product-actions">
+                            <input id="qty-filtro" type="number" min="1" value="1" style="width:84px;padding:0.5rem;border-radius:8px;border:1px solid #e6eef6;">
+                            <button class="btn btn-primary" id="add-filtro">Agregar al carrito</button>
+                            <button class="btn btn-outline" id="back-products-filtro">Volver a productos</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL: SERVICIOS -->
+        <section class="tab-panel" id="panel-servicios" data-panel style="display:none;">
+            <h2>¿Qué Hacemos?</h2>
+            <p class="section-subtitle">Operamos un servicio integral de protección y gestión sostenible del agua</p>
+
+            <div class="services-grid" style="margin-top:0.8rem;">
+                <div class="service-card">
+                    <img src="https://i.imgur.com/RQdSLAH.jpeg" alt="Recolección de Agua">
+                    <div class="service-card-content">
+                        <h3>Recolección de Agua</h3>
+                        <p class="muted">Extraemos aguas estancadas con camiones especializados, reduciendo riesgos de inundación.</p>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <img src="https://i.imgur.com/V5Qttkq.jpeg" alt="Tratamiento y Clasificación">
+                    <div class="service-card-content">
+                        <h3>Tratamiento y Clasificación</h3>
+                        <p class="muted">Procesamos y clasificamos el agua según su calidad para diferentes usos responsables.</p>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <img src="https://i.imgur.com/kJEahzM.png" alt="Redistribución">
+                    <div class="service-card-content">
+                        <h3>Redistribución</h3>
+                        <p class="muted">Suministramos agua clasificada a hogares, empresas e instituciones según calidad.</p>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <img src="https://i.imgur.com/ro9HaEB.png" alt="Educación Comunitaria">
+                    <div class="service-card-content">
+                        <h3>Educación Comunitaria</h3>
+                        <p class="muted">Capacitamos y dejamos habilidades instaladas en la comunidad para gestión sostenible.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL: PROPUESTA -->
+        <section class="tab-panel" id="panel-propuesta" data-panel style="display:none;">
+            <h2>Nuestra Propuesta de Valor</h2>
+            <p class="section-subtitle">Reducir pérdidas por inundaciones, mejorar la salud y la resiliencia urbana, y facilitar el aprovechamiento sostenible del agua.</p>
+
+            <div style="margin-top:1rem; display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:1rem;">
+                <div class="propuesta-card" style="padding:1rem; border-radius:12px; background:linear-gradient(135deg,#eefcff,#f0fcff);">
+                    <h3 style="margin-bottom:0.4rem;">Recolección</h3>
+                    <p class="muted">Capturamos aguas estancadas antes de que causen daños.</p>
+                </div>
+                <div class="propuesta-card" style="padding:1rem; border-radius:12px; background:linear-gradient(135deg,#eefcff,#f0fcff);">
+                    <h3 style="margin-bottom:0.4rem;">Clasificación</h3>
+                    <p class="muted">Tratamos y categorizamos el agua según calidad y uso.</p>
+                </div>
+                <div class="propuesta-card" style="padding:1rem; border-radius:12px; background:linear-gradient(135deg,#eefcff,#f0fcff);">
+                    <h3 style="margin-bottom:0.4rem;">Suministro</h3>
+                    <p class="muted">Redistribuimos para usos potables, domésticos o industriales.</p>
+                </div>
+            </div>
+
+            <!-- Cómo trabajamos (se añade en Propuesta) -->
+            <div style="margin-top:1.1rem;">
+                <h3 style="color:#0ea5e9;margin-bottom:0.6rem;text-align:left;">Cómo trabajamos</h3>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0.9rem;">
+                    <div class="proceso-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4 style="margin:0;color:#0ea5e9;">Diagnóstico y Planificación</h4>
+                            <p>Realizamos un análisis técnico completo y diseñamos la ruta óptima de intervención.</p>
+                        </div>
+                    </div>
+                    <div class="proceso-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4 style="margin:0;color:#0ea5e9;">Succión y Transporte</h4>
+                            <p>Ejecutamos la recolección del agua estancada con equipos especializados.</p>
+                        </div>
+                    </div>
+                    <div class="proceso-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4 style="margin:0;color:#0ea5e9;">Tratamiento</h4>
+                            <p>Filtramos, desinfectamos y clasificamos con sensores y procesos adecuados.</p>
+                        </div>
+                    </div>
+                    <div class="proceso-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4 style="margin:0;color:#0ea5e9;">Almacenamiento</h4>
+                            <p>Guardamos en tanques compartimentados para asegurar logística y calidad.</p>
+                        </div>
+                    </div>
+                    <div class="proceso-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h4 style="margin:0;color:#0ea5e9;">Entrega y Capacitación</h4>
+                            <p>Suministramos el agua y dejamos capacidades instaladas en la comunidad.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL: CLIENTES -->
+        <section class="tab-panel" id="panel-clientes" data-panel style="display:none;">
+            <h2>¿A Quién Servimos?</h2>
+            <p class="section-subtitle">Acompañamos a diversos sectores en su camino hacia la sostenibilidad y la prevención</p>
+
+            <div class="clientes-grid" style="margin-top:0.8rem;">
+                <div class="cliente-card">
+                    <div style="padding:1rem;">
+                        <h3>Hogares</h3>
+                        <p class="muted">Especialmente en zonas que requieren protección contra inundaciones.</p>
+                    </div>
+                </div>
+                <div class="cliente-card">
+                    <div style="padding:1rem;">
+                        <h3>Instituciones Educativas</h3>
+                        <p class="muted">Colegios, universidades y centros educativos que buscan sostenibilidad.</p>
+                    </div>
+                </div>
+                <div class="cliente-card">
+                    <div style="padding:1rem;">
+                        <h3>Sector Salud</h3>
+                        <p class="muted">Hospitales y centros médicos que necesitan continuidad operativa.</p>
+                    </div>
+                </div>
+                <div class="cliente-card">
+                    <div style="padding:1rem;">
+                        <h3>Empresas</h3>
+                        <p class="muted">Hoteles, constructoras, industrias y centros comerciales.</p>
+                    </div>
+                </div>
+                <div class="cliente-card">
+                    <div style="padding:1rem;">
+                        <h3>Gobiernos Locales</h3>
+                        <p class="muted">Entidades públicas con programas de agua segura y gestión del riesgo.</p>
+                    </div>
+                </div>
+                <div class="cliente-card">
+                    <div style="padding:1rem;">
+                        <h3>ONGs</h3>
+                        <p class="muted">Organizaciones con proyectos de impacto social y ambiental.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL: EQUIPO (completo) -->
+        <section class="tab-panel" id="panel-equipo" data-panel style="display:none;">
+            <h2>Nuestro Equipo</h2>
+            <p class="section-subtitle">Un equipo multidisciplinario que integra ingeniería, operación de campo y educación comunitaria</p>
+
+            <div class="team-grid" style="margin-top:0.8rem;">
+                <div class="team-card" style="padding:1rem;text-align:left;">
+                    <div style="display:flex;align-items:center;gap:0.8rem;">
+                        <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#0ea5e9,#06b6d4);color:white;display:flex;align-items:center;justify-content:center;font-weight:900;">VD</div>
+                        <div>
+                            <h3 style="margin-bottom:0.2rem;">Vanessa Sofía Diago Rodríguez</h3>
+                            <div class="small" style="color:#0ea5e9;font-weight:700;margin-bottom:0.25rem;">Ingeniería y Optimización del Proyecto</div>
+                            <p class="muted">Lidera la optimización de procesos técnicos y mejora continua del sistema.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card" style="padding:1rem;text-align:left;">
+                    <div style="display:flex;align-items:center;gap:0.8rem;">
+                        <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#0ea5e9,#06b6d4);color:white;display:flex;align-items:center;justify-content:center;font-weight:900;">JJ</div>
+                        <div>
+                            <h3 style="margin-bottom:0.2rem;">Juan Daniel Jácome Yáñez</h3>
+                            <div class="small" style="color:#0ea5e9;font-weight:700;margin-bottom:0.25rem;">Ingeniería de Planta</div>
+                            <p class="muted">Gestiona las operaciones técnicas de recolección, tratamiento y distribución del agua.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card" style="padding:1rem;text-align:left;">
+                    <div style="display:flex;align-items:center;gap:0.8rem;">
+                        <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#0ea5e9,#06b6d4);color:white;display:flex;align-items:center;justify-content:center;font-weight:900;">YC</div>
+                        <div>
+                            <h3 style="margin-bottom:0.2rem;">Yosueth David Cárdenas Velasco</h3>
+                            <div class="small" style="color:#0ea5e9;font-weight:700;margin-bottom:0.25rem;">Marketing y Ventas</div>
+                            <p class="muted">Desarrolla estrategias comerciales y gestiona la relación con clientes y aliados.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card" style="padding:1rem;text-align:left;">
+                    <div style="display:flex;align-items:center;gap:0.8rem;">
+                        <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#0ea5e9,#06b6d4);color:white;display:flex;align-items:center;justify-content:center;font-weight:900;">RR</div>
+                        <div>
+                            <h3 style="margin-bottom:0.2rem;">Ruddy Rodríguez Romero</h3>
+                            <div class="small" style="color:#0ea5e9;font-weight:700;margin-bottom:0.25rem;">Recursos Humanos</div>
+                            <p class="muted">Coordina el talento humano y fortalece las capacidades del equipo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card" style="padding:1rem;text-align:left;">
+                    <div style="display:flex;align-items:center;gap:0.8rem;">
+                        <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#0ea5e9,#06b6d4);color:white;display:flex;align-items:center;justify-content:center;font-weight:900;">KP</div>
+                        <div>
+                            <h3 style="margin-bottom:0.2rem;">Károlay Palafor Cantillo</h3>
+                            <div class="small" style="color:#0ea5e9;font-weight:700;margin-bottom:0.25rem;">Operaciones de Campo</div>
+                            <p class="muted">Supervisa la ejecución en terreno y la logística de recolección y entrega.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card" style="padding:1rem;text-align:left;">
+                    <div style="display:flex;align-items:center;gap:0.8rem;">
+                        <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#0ea5e9,#06b6d4);color:white;display:flex;align-items:center;justify-content:center;font-weight:900;">KG</div>
+                        <div>
+                            <h3 style="margin-bottom:0.2rem;">Kareylis González Cardona</h3>
+                            <div class="small" style="color:#0ea5e9;font-weight:700;margin-bottom:0.25rem;">Educación Comunitaria</div>
+                            <p class="muted">Diseña programas de capacitación y sensibilización para las comunidades.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL: CONTACTO -->
+        <section class="tab-panel" id="panel-contacto" data-panel style="display:none;">
+            <h2>Contacto</h2>
+            <div style="max-width:900px;margin:1rem auto;">
+                <!-- Mantuvimos el cuadro de agenda tal como en el index original -->
+                <div class="contact-box">
+                    <h3 style="font-size:1.4rem;margin-bottom:0.4rem;">Agenda una Evaluación Gratuita</h3>
+                    <p style="margin-bottom:0.5rem;">¿Tu hogar, empresa o institución necesita prevención de inundaciones o agua clasificada para uso responsable?</p>
+                    <p style="margin-bottom:0.75rem;">Llevamos la solución completa desde el diagnóstico hasta la operación y el mantenimiento</p>
+                    <div style="display:flex;flex-direction:column;gap:0.7rem;margin-top:0.5rem;">
+                        <a href="mailto:aquashield07@gmail.com" class="btn btn-outline" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;">📧 aquashield07@gmail.com</a>
+                        <a href="tel:+573053781367" class="btn btn-outline" style="display:flex;align-items:center;justify-content:center;gap:0.5rem;">📱 +57 305 378 1367</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL: CARRITO -->
+        <section class="tab-panel" id="panel-carrito" data-panel style="display:none;">
+            <h2>Carrito</h2>
+            <div id="cartContent" style="margin-top:0.8rem;">
+                <div class="muted">Tu carrito está vacío</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer style="padding:2rem 1rem;background:#0f172a;color:white;">
+        <div style="max-width:1200px;margin:0 auto;text-align:center;">
+            <h3 style="margin-bottom:0.4rem;">💧 AquaShield</h3>
+            <div style="color:#94a3b8;font-size:0.94rem;">Transformando problemas en oportunidades sostenibles</div>
+            <div style="color:#94a3b8;font-size:0.85rem;margin-top:0.6rem;">© 2025 AquaShield. Todos los derechos reservados.</div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS: comportamiento SPA, carrito, productos, checkout -->
+    <script>
+        /***********************
+         *  UTILIDADES & ESTADO
+         ***********************/
+        const panels = document.querySelectorAll('[data-panel]');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const menuLinks = document.querySelectorAll('.menu-link');
+        const ventasDropdown = document.getElementById('ventasDropdown');
+        const cartFloat = document.getElementById('cartFloat');
+        const miniCart = document.getElementById('miniCart');
+        const miniCartBody = document.getElementById('miniCartBody');
+        const cartCount = document.getElementById('cartCount');
+        const miniTotal = document.getElementById('miniTotal');
+        const miniVer = document.getElementById('miniVer');
+        const miniPagar = document.getElementById('miniPagar');
+        const cartContent = document.getElementById('cartContent');
+
+        // Productos (datos centrales)
+        const PRODUCTS = {
+            'barrera': {
+                id: 'barrera',
+                name: 'Barreras Portátiles',
+                price: 85000,
+                image: 'https://i.imgur.com/eGsM4mI.jpeg',
+                short: 'Comercializamos barreras contra inundaciones para proteger viviendas e instituciones.',
+                long: 'Protege tu hogar o institución con barreras portátiles fáciles de instalar. Diseñadas para situaciones de emergencia, son ligeras, duraderas y rápidas de desplegar. Material resistente y reutilizable, transporte sencillo y montaje rápido.'
+            },
+            'filtro': {
+                id: 'filtro',
+                name: 'Filtros Portátiles',
+                price: 110000,
+                image: 'https://i.imgur.com/4G2vDXd.jpeg',
+                short: 'Ofrecemos filtros con carbón activado y membranas para emergencias o consumo seguro.',
+                long: 'Filtros con carbón activado y membranas - ideales para emergencias y consumo seguro. Incluyen cartuchos reemplazables y proporcionan agua con mejor sabor y menor carga de contaminantes físicos y algunos compuestos orgánicos.'
+            }
+        };
+
+        // Cart state (persistido)
+        let cart = JSON.parse(localStorage.getItem('aq_cart') || '[]');
+
+        function formatCOP(n){
+            try {
+                return Number(n).toLocaleString('es-CO') + ' COP';
+            } catch(e) {
+                return n + ' COP';
+            }
+        }
+
+        function saveCart(){ localStorage.setItem('aq_cart', JSON.stringify(cart)); updateCartUI(); }
+
+        /***********************
+         *  PANEL SWITCHING
+         ***********************/
+        function showPanel(name){
+            // name corresponds to panel-<name> or panel-product-<id>
+            panels.forEach(p => {
+                const should = (p.id === 'panel-' + name) || (name.startsWith('product-') && p.id === 'panel-' + name.replace('product-','product-'));
+                // we'll handle product panels explicitly below
+            });
+            // hide all, then show matching
+            panels.forEach(p => p.style.display = 'none');
+
+            // product special handling
+            if(name === 'inicio') {
+                document.getElementById('panel-inicio').style.display = '';
+            } else if(name === 'historia') {
+                document.getElementById('panel-historia').style.display = '';
+            } else if(name === 'productos') {
+                document.getElementById('panel-productos').style.display = '';
+            } else if(name === 'servicios') {
+                document.getElementById('panel-servicios').style.display = '';
+            } else if(name === 'propuesta') {
+                document.getElementById('panel-propuesta').style.display = '';
+            } else if(name === 'clientes') {
+                document.getElementById('panel-clientes').style.display = '';
+            } else if(name === 'equipo') {
+                document.getElementById('panel-equipo').style.display = '';
+            } else if(name === 'contacto') {
+                document.getElementById('panel-contacto').style.display = '';
+            } else if(name === 'carrito') {
+                document.getElementById('panel-carrito').style.display = '';
+            } else if(name === 'product-barrera') {
+                document.getElementById('panel-product-barrera').style.display = '';
+            } else if(name === 'product-filtro') {
+                document.getElementById('panel-product-filtro').style.display = '';
+            } else {
+                // fallback to inicio
+                document.getElementById('panel-inicio').style.display = '';
+            }
+
+            // update active tab classes
+            tabBtns.forEach(btn => {
+                const t = btn.dataset.tab;
+                btn.classList.toggle('active', t === name);
+            });
+
+            // if showing a panel other than inicio, scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // close dropdown
+            ventasDropdown.classList.remove('open');
+        }
+
+        // attach tab buttons (top nav)
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if(btn.dataset.tab) showPanel(btn.dataset.tab);
+            });
+        });
+
+        // dropdown toggle
+        ventasDropdown.querySelector('.dropdown-toggle').addEventListener('click', (ev) => {
+            ventasDropdown.classList.toggle('open');
+        });
+
+        // links inside dropdown
+        menuLinks.forEach(a => {
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tab = a.dataset.tab;
+                if(tab) showPanel(tab);
+            });
+        });
+
+        // close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if(!ventasDropdown.contains(e.target)) ventasDropdown.classList.remove('open');
+        });
+
+        // logo click returns to inicio
+        document.querySelector('.logo').addEventListener('click', (e) => {
+            e.preventDefault();
+            showPanel('inicio');
+        });
+
+        /***********************
+         *  PRODUCTS INTERACTIONS
+         ***********************/
+        // Open product detail when pressing "Ver"
+        document.querySelectorAll('.view-product').forEach(button => {
+            button.addEventListener('click', (ev) => {
+                ev.preventDefault();
+                const id = button.dataset.product;
+                if(id === 'barrera') showPanel('product-barrera');
+                if(id === 'filtro') showPanel('product-filtro');
+            });
+        });
+
+        // Back to products buttons in product detail panels
+        document.getElementById('back-products-barrera').addEventListener('click', () => { showPanel('productos'); });
+        document.getElementById('back-products-filtro').addEventListener('click', () => { showPanel('productos'); });
+
+        // Add to cart from product detail
+        document.getElementById('add-barrera').addEventListener('click', () => {
+            const qty = Math.max(1, parseInt(document.getElementById('qty-barrera').value) || 1);
+            addToCart(PRODUCTS.barrera.id, PRODUCTS.barrera.name, PRODUCTS.barrera.price, PRODUCTS.barrera.image, qty);
+        });
+        document.getElementById('add-filtro').addEventListener('click', () => {
+            const qty = Math.max(1, parseInt(document.getElementById('qty-filtro').value) || 1);
+            addToCart(PRODUCTS.filtro.id, PRODUCTS.filtro.name, PRODUCTS.filtro.price, PRODUCTS.filtro.image, qty);
+        });
+
+        // Add to cart directly from cards (if user uses the qty and then click "Agregar" in initial version - we used "Ver" so card add not used)
+        // However we've left qty fields on cards; attach behavior to them if present
+        document.querySelectorAll('.product-card').forEach(card => {
+            // if the card has an add button in future, could attach here
+        });
+
+        /***********************
+         *  CART: add, update, remove, render
+         ***********************/
+        function updateCartUI(){
+            // update count badge
+            const totalCount = cart.reduce((s,i) => s + i.qty, 0);
+            cartCount.textContent = totalCount;
+
+            // mini cart body
+            if(cart.length === 0){
+                miniCartBody.innerHTML = '<div style="color:#64748b;">No hay productos agregados</div>';
+                miniTotal.textContent = formatCOP(0);
+            } else {
+                miniCartBody.innerHTML = '';
+                let total = 0;
+                cart.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'item';
+                    div.innerHTML = `<img src="${item.image}" alt="${item.name}"><div class="meta"><div class="name">${item.name}</div><div class="small muted">${item.qty} × ${formatCOP(item.price)}</div></div>`;
+                    miniCartBody.appendChild(div);
+                    total += item.price * item.qty;
+                });
+                miniTotal.textContent = formatCOP(total);
+            }
+
+            renderCartPage();
+        }
+
+        function addToCart(id, name, price, image, qty){
+            qty = Number(qty);
+            const found = cart.find(i => i.id === id);
+            if(found) found.qty += qty;
+            else cart.push({ id, name, price, image, qty });
+            saveCart();
+            showToast(`${qty} × ${name} agregado al carrito`);
+        }
+
+        function renderCartPage(){
+            if(!cartContent) return;
+            if(cart.length === 0){
+                cartContent.innerHTML = '<div class="muted">Tu carrito está vacío</div>';
+                return;
+            }
+            let total = cart.reduce((s,i) => s + i.price * i.qty, 0);
+            const rows = cart.map(item => `
+                <div class="cart-row" data-id="${item.id}">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-details">
+                        <div style="font-weight:800;">${item.name}</div>
+                        <div class="small muted">Precio unitario: ${formatCOP(item.price)}</div>
+                        <div style="margin-top:0.6rem;display:flex;gap:0.6rem;align-items:center;">
+                            <input type="number" min="1" value="${item.qty}" class="qty-update" style="width:84px;padding:0.45rem;border-radius:8px;border:1px solid #e6eef6;">
+                            <button class="btn btn-outline btn-update">Actualizar</button>
+                            <button class="btn btn-outline btn-remove">Eliminar</button>
+                        </div>
+                    </div>
+                    <div style="font-weight:900;">${formatCOP(item.price * item.qty)}</div>
+                </div>
+            `).join('');
+            cartContent.innerHTML = `
+                <div style="display:grid;grid-template-columns:1fr 320px;gap:1rem;">
+                    <div>
+                        <div style="display:flex;flex-direction:column;gap:0.8rem;">${rows}</div>
+                    </div>
+                    <div>
+                        <div class="cart-summary">
+                            <div style="font-size:1.05rem;font-weight:800;margin-bottom:0.6rem;">Resumen de compra</div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;"><div>Subtotal</div><div id="summarySubtotal">${formatCOP(total)}</div></div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:0.8rem;"><div>Envío</div><div id="summaryEnvio">Gratis</div></div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:1rem;font-weight:900;"><div>Total</div><div id="summaryTotal">${formatCOP(total)}</div></div>
+                            <div style="margin-top:0.6rem;"><button class="btn btn-primary" id="btnCheckout">Pagar</button></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // attach update/remove handlers
+            document.querySelectorAll('.cart-row').forEach(row => {
+                const id = row.dataset.id;
+                const btnUpdate = row.querySelector('.btn-update');
+                const btnRemove = row.querySelector('.btn-remove');
+                btnUpdate.addEventListener('click', () => {
+                    const newQty = Number(row.querySelector('.qty-update').value) || 1;
+                    const item = cart.find(i => i.id === id);
+                    if(item) item.qty = newQty;
+                    saveCart();
+                });
+                btnRemove.addEventListener('click', () => {
+                    cart = cart.filter(i => i.id !== id);
+                    saveCart();
+                });
+            });
+
+            document.getElementById('btnCheckout').addEventListener('click', () => {
+                openCheckout(total);
+            });
+        }
+
+        function openCheckout(total){
+            // show simulated checkout form in cartContent
+            cartContent.innerHTML = `
+                <div style="display:grid;grid-template-columns:1fr 360px;gap:1rem;">
+                    <div>
+                        <div style="background:white;padding:1rem;border-radius:12px;box-shadow:0 6px 24px rgba(2,6,23,0.04);">
+                            <h3 style="margin-bottom:0.6rem;">Datos de facturación y envío</h3>
+                            <div style="margin-bottom:0.6rem;"><input id="cfName" type="text" placeholder="Nombre completo" style="width:100%;padding:0.6rem;border-radius:8px;border:1px solid #e6eef6;"></div>
+                            <div style="margin-bottom:0.6rem;"><input id="cfEmail" type="email" placeholder="Correo electrónico" style="width:100%;padding:0.6rem;border-radius:8px;border:1px solid #e6eef6;"></div>
+                            <div style="margin-bottom:0.6rem;"><input id="cfAddress" type="text" placeholder="Dirección de envío" style="width:100%;padding:0.6rem;border-radius:8px;border:1px solid #e6eef6;"></div>
+                            <div style="margin-bottom:0.6rem;">
+                                <select id="cfPayment" style="width:100%;padding:0.6rem;border-radius:8px;border:1px solid #e6eef6;">
+                                    <option value="tarjeta">Tarjeta de crédito/débito</option>
+                                    <option value="transferencia">Transferencia</option>
+                                    <option value="pse">PSE</option>
+                                </select>
+                            </div>
+                            <div style="margin-top:0.6rem;"><button class="btn btn-primary" id="cfConfirm">Confirmar pago</button></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="cart-summary">
+                            <div style="font-weight:800;margin-bottom:0.6rem;">Resumen de la orden</div>
+                            <div id="checkoutItems" style="max-height:260px;overflow:auto;margin-bottom:0.6rem;"></div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;"><div>Total</div><div id="checkoutTotal">${formatCOP(total)}</div></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            // fill items
+            const ci = document.getElementById('checkoutItems');
+            cart.forEach(it => {
+                const div = document.createElement('div');
+                div.style.display = 'flex';
+                div.style.justifyContent = 'space-between';
+                div.style.marginBottom = '0.45rem';
+                div.innerHTML = `<div>${it.qty} × ${it.name}</div><div>${formatCOP(it.price * it.qty)}</div>`;
+                ci.appendChild(div);
+            });
+
+            document.getElementById('cfConfirm').addEventListener('click', () => {
+                document.getElementById('cfConfirm').disabled = true;
+                document.getElementById('cfConfirm').textContent = 'Procesando...';
+                setTimeout(() => {
+                    cart = [];
+                    saveCart();
+                    cartContent.innerHTML = `<div style="padding:1.2rem;background:white;border-radius:12px;text-align:center;box-shadow:0 6px 24px rgba(2,6,23,0.04);"><h3>¡Pago simulado exitoso!</h3><p>Gracias por tu compra. Hemos recibido tu orden y te contactaremos al correo proporcionado.</p><div style="margin-top:0.8rem;"><button class="btn btn-primary" id="goHome">Volver al inicio</button></div></div>`;
+                    document.getElementById('goHome').addEventListener('click', () => showPanel('inicio'));
+                }, 1300);
+            });
+        }
+
+        /***********************
+         *  MINI CART INTERACTIONS
+         ***********************/
+        cartFloat.addEventListener('click', () => showPanel('carrito'));
+        cartFloat.addEventListener('mouseenter', () => miniCart.classList.add('visible'));
+        cartFloat.addEventListener('mouseleave', (e) => { if (!miniCart.contains(e.relatedTarget)) miniCart.classList.remove('visible'); });
+        miniCart.addEventListener('mouseenter', () => miniCart.classList.add('visible'));
+        miniCart.addEventListener('mouseleave', () => miniCart.classList.remove('visible'));
+        miniVer.addEventListener('click', () => showPanel('carrito'));
+        miniPagar.addEventListener('click', () => showPanel('carrito'));
+
+        /***********************
+         *  TOAST (feedback)
+         ***********************/
+        function showToast(msg){
+            const t = document.createElement('div');
+            t.textContent = msg;
+            t.style.position = 'fixed';
+            t.style.left = '50%';
+            t.style.transform = 'translateX(-50%)';
+            t.style.bottom = '110px';
+            t.style.background = 'rgba(2,6,23,0.9)';
+            t.style.color = 'white';
+            t.style.padding = '0.6rem 1rem';
+            t.style.borderRadius = '8px';
+            t.style.zIndex = 1600;
+            document.body.appendChild(t);
+            setTimeout(()=> t.style.opacity = '0', 1400);
+            setTimeout(()=> t.remove(), 1900);
+        }
+
+        /***********************
+         *  INITIAL RENDER & HELPERS
+         ***********************/
+        function init(){
+            // show default panel
+            showPanel('inicio');
+            updateCartUI();
+        }
+
+        // Save cart helper
+        function saveCart(){ localStorage.setItem('aq_cart', JSON.stringify(cart)); updateCartUI(); }
+
+        // initial
+        init();
+
+        /***********************
+         *  EXTRAS: Buttons that link to Contacto from Hero and Nav
+         ***********************/
+        document.getElementById('heroContactBtn').addEventListener('click', () => showPanel('contacto'));
+        document.getElementById('inicioSolicitar').addEventListener('click', () => showPanel('contacto'));
+        document.getElementById('btnSolicitar').addEventListener('click', () => showPanel('contacto'));
+
+        /***********************
+         *  FEATURE: Add to cart from product cards (small)
+         *  This attaches to the card-level qty inputs if present and allows quick add
+         ***********************/
+        document.querySelectorAll('.product-card').forEach(card => {
+            const id = card.dataset.id;
+            const btnView = card.querySelector('.view-product');
+            // Also allow double-click on card image/title to open detail
+            card.addEventListener('dblclick', () => {
+                if(id === 'barrera') showPanel('product-barrera');
+                if(id === 'filtro') showPanel('product-filtro');
+            });
+            // If you later add direct 'Agregar' button to cards, attach logic here.
+        });
+
+        /***********************
+         *  Ensure saveCart function available below duplicates removed
+         ***********************/
+        // (the saveCart function above is defined twice in previous structure; ensure final binding)
+        // Already present as function saveCart() above, but make sure no error:
+        window.addToCart = addToCart; // expose for debugging if needed
+
+    </script>
+</body>
+</html>
